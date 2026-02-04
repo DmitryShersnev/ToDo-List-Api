@@ -13,11 +13,16 @@ const ToDO = ({
   setFilter,
   countOfActive,
   clearTasks,
+  token,
 }) => {
   return (
     <>
       <Header />
-      <InputTask filteredTasks={filteredTasks} setTasks={setTasks} />
+      <InputTask
+        filteredTasks={filteredTasks}
+        setTasks={setTasks}
+        token={token}
+      />
       <hr />
       <TasksList
         filteredTasks={filteredTasks}

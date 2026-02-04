@@ -20,8 +20,7 @@ function App() {
         "https://todo-redev.herokuapp.com/api/todos",
         {
           headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RkaW1hQGdtYWlsLmNvbSIsImlkIjoyMTQxLCJpYXQiOjE3NzAwMzk1OTJ9.bquZQSqhMH3mchqPoKsgejoaMrtvQmhfo3T-fvFZhRM",
+            Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -54,8 +53,7 @@ function App() {
         {
           method: "DELETE",
           headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RkaW1hQGdtYWlsLmNvbSIsImlkIjoyMTQxLCJpYXQiOjE3NzAwMzk1OTJ9.bquZQSqhMH3mchqPoKsgejoaMrtvQmhfo3T-fvFZhRM",
+            Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -73,8 +71,7 @@ function App() {
         {
           method: "PATCH",
           headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RkaW1hQGdtYWlsLmNvbSIsImlkIjoyMTQxLCJpYXQiOjE3NzAwMzk1OTJ9.bquZQSqhMH3mchqPoKsgejoaMrtvQmhfo3T-fvFZhRM",
+            Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -97,8 +94,7 @@ function App() {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RkaW1hQGdtYWlsLmNvbSIsImlkIjoyMTQxLCJpYXQiOjE3NzAwMzk1OTJ9.bquZQSqhMH3mchqPoKsgejoaMrtvQmhfo3T-fvFZhRM",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ title: newTitle }),
         },
@@ -122,8 +118,7 @@ function App() {
           fetch(`https://todo-redev.herokuapp.com/api/todos/${item.id}`, {
             method: "DELETE",
             headers: {
-              Authorization:
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RkaW1hQGdtYWlsLmNvbSIsImlkIjoyMTQxLCJpYXQiOjE3NzAwMzk1OTJ9.bquZQSqhMH3mchqPoKsgejoaMrtvQmhfo3T-fvFZhRM",
+              Authorization: `Bearer ${token}`,
             },
           }),
         ),
@@ -155,6 +150,7 @@ function App() {
                 countOfActive={countOfActive}
                 clearTasks={clearTasks}
                 setFilter={setFilter}
+                token={token}
               />
             }
           />

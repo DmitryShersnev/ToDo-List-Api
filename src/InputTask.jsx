@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const InputTask = ({ filteredTasks, setTasks }) => {
+const InputTask = ({ filteredTasks, setTasks, token }) => {
   const [inputText, setInputText] = useState("");
   const [error, setError] = useState(false);
   const handleChange = (e) => {
@@ -15,8 +15,7 @@ const InputTask = ({ filteredTasks, setTasks }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RkaW1hQGdtYWlsLmNvbSIsImlkIjoyMTQxLCJpYXQiOjE3NzAwMzk1OTJ9.bquZQSqhMH3mchqPoKsgejoaMrtvQmhfo3T-fvFZhRM",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ title: inputText }),
         },
