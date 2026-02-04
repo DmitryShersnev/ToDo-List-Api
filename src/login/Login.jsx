@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router";
 
 const Login = ({ setToken }) => {
-  const naigate = useNavigate();
+  const navigate = useNavigate();
   const initialValues = {
     email: "",
     password: "",
@@ -33,7 +33,7 @@ const Login = ({ setToken }) => {
       );
       const res = await response.json();
       setToken(res);
-      naigate("/");
+      navigate("/");
 
       console.log(res);
     } catch (error) {
