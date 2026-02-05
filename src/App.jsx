@@ -10,7 +10,8 @@ function App() {
   const [filter, setFilter] = useState("all");
   const [token, setToken] = useState(() => {
     const saved = localStorage.getItem("token");
-    return saved ? saved : "";
+
+    return saved ? saved : [];
   });
 
   let filteredTasks = [];
@@ -119,7 +120,7 @@ function App() {
     <>
       <Routes>
         <Route
-          path="/ToDo-List/reglog"
+          path="/ToDo-List-Api/reglog"
           element={
             <Suspense fallback={"Загрузка..."}>
               <RegLog setToken={setToken} />
@@ -127,7 +128,7 @@ function App() {
           }
         />
         <Route
-          path="/ToDo-List/"
+          path="/ToDo-List-Api/"
           element={
             <Suspense fallback={"Загрузка..."}>
               <PrivateRoute token={token} />
@@ -135,7 +136,7 @@ function App() {
           }
         >
           <Route
-            path="/ToDo-List/todo"
+            path="/ToDo-List-Api/todo"
             element={
               <Suspense fallback={"Загрузка..."}>
                 <ToDO
