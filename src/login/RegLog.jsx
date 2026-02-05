@@ -2,10 +2,10 @@ import { useNavigate, Routes, Route } from "react-router";
 import Login from "./Login";
 import Registration from "./Registration";
 
-const RegLog = ({ setToken }) => {
+const RegLog = ({ setToken, token }) => {
   return (
     <>
-      <Login setToken={setToken} />
+      <Login setToken={setToken} token={token} />
       <Registration />
     </>
   );

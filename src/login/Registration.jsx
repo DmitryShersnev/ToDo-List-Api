@@ -20,7 +20,10 @@ const Registration = () => {
       )
       .required("Введите пароль"),
     gender: Yup.string().required("Выберите пол"),
-    age: Yup.number().required("Введите ваш возраст"),
+    age: Yup.number()
+      .min(10, "Минимальное значение - 10")
+      .max(100, "Максимальное значение - 100")
+      .required("Введите ваш возраст"),
   });
 
   const addNewUser = async (data) => {
@@ -36,7 +39,11 @@ const Registration = () => {
         },
       );
       const res = await response.json();
-      console.log(res);
+      if (response.ok) {
+        alert("Вы успешно зарегистрировались. Теперь нужно залогиниться");
+      } else {
+        alert(res.message);
+      }
     } catch (error) {
       console.log(error.message);
     }
@@ -44,7 +51,6 @@ const Registration = () => {
 
   const handleSubmit = (data) => {
     addNewUser(data);
-    console.log(data);
   };
   return (
     <>

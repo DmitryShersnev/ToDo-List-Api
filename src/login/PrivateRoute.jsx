@@ -1,6 +1,7 @@
 import { Outlet, Navigate } from "react-router";
 
-const PrivateRoute = ({ setToken, token }) => {
-  return token ? <Outlet /> : <Navigate to="/reglog" replace />;
+const PrivateRoute = ({ token }) => {
+  // const token = localStorage.getItem("token");
+  return token ? <Outlet /> : <Navigate to="/ToDo-List/reglog" replace />;
 };
 export default PrivateRoute;

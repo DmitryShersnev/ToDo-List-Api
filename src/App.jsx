@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import ToDO from "./ToDo";
 import { Routes, Route } from "react-router";
 import RegLog from "./login/RegLog";
@@ -8,28 +8,10 @@ import PrivateRoute from "./login/PrivateRoute";
 function App() {
   const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState("all");
-  const [token, setToken] = useState("");
-
-  useEffect(() => {
-    getAllTasks();
-  }, []);
-
-  const getAllTasks = async () => {
-    try {
-      const response = await fetch(
-        "https://todo-redev.herokuapp.com/api/todos",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      const data = await response.json();
-      setTasks(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [token, setToken] = useState(() => {
+    const saved = localStorage.getItem("token");
+    return saved ? saved : "";
+  });
 
   let filteredTasks = [];
 
@@ -136,22 +118,39 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/reglog" element={<RegLog setToken={setToken} />} />
-        <Route element={<PrivateRoute setToken={setToken} token={token} />}>
+        <Route
+          path="/ToDo-List/reglog"
+          element={
+            <Suspense fallback={"Загрузка..."}>
+              <RegLog setToken={setToken} />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/ToDo-List/"
+          element={
+            <Suspense fallback={"Загрузка..."}>
+              <PrivateRoute token={token} />
+            </Suspense>
+          }
+        >
           <Route
-            path="/"
+            path="/ToDo-List/todo"
             element={
-              <ToDO
-                filteredTasks={filteredTasks}
-                deleteTask={deleteTask}
-                changeCheckbox={changeCheckbox}
-                changeTitle={changeTitle}
-                setTasks={setTasks}
-                countOfActive={countOfActive}
-                clearTasks={clearTasks}
-                setFilter={setFilter}
-                token={token}
-              />
+              <Suspense fallback={"Загрузка..."}>
+                <ToDO
+                  filteredTasks={filteredTasks}
+                  deleteTask={deleteTask}
+                  changeCheckbox={changeCheckbox}
+                  changeTitle={changeTitle}
+                  setTasks={setTasks}
+                  countOfActive={countOfActive}
+                  clearTasks={clearTasks}
+                  setFilter={setFilter}
+                  token={token}
+                  setToken={setToken}
+                />
+              </Suspense>
             }
           />
         </Route>

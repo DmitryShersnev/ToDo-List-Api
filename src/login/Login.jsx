@@ -2,7 +2,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router";
 
-const Login = ({ setToken }) => {
+const Login = ({ setToken, token }) => {
   const navigate = useNavigate();
   const initialValues = {
     email: "",
@@ -32,12 +32,15 @@ const Login = ({ setToken }) => {
         },
       );
       const res = await response.json();
-      setToken(res);
-      navigate("/");
-
-      console.log(res);
+      if (response.ok) {
+        setToken(res.token);
+        navigate("/ToDo-List/todo");
+        localStorage.setItem("token", res.token);
+      } else {
+        alert(res.message);
+      }
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
   };
 
