@@ -4,6 +4,7 @@ import TasksList from "./TasksList";
 import Filtrarion from "./Filtration";
 import Cleaning from "./Cleaning";
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 const ToDO = ({ setTasks, tasks, filter, setFilter, token, setToken }) => {
   useEffect(() => {
@@ -11,6 +12,8 @@ const ToDO = ({ setTasks, tasks, filter, setFilter, token, setToken }) => {
   }, []);
 
   console.log("todo");
+
+  const navigate = useNavigate();
 
   const getAllTasks = async () => {
     try {
@@ -147,7 +150,12 @@ const ToDO = ({ setTasks, tasks, filter, setFilter, token, setToken }) => {
       <Filtrarion setFilter={setFilter} />
       <hr />
       <Cleaning countOfActive={countOfActive} clearTasks={clearTasks} />
-      <button onClick={() => localStorage.removeItem("token")}>
+      <button
+        onClick={() => {
+          localStorage.removeItem("token");
+          navigate(0);
+        }}
+      >
         Разлогиниться
       </button>
     </>
