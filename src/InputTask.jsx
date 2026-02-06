@@ -15,7 +15,7 @@ const InputTask = ({ filteredTasks, setTasks, token }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify({ title: inputText }),
         },
