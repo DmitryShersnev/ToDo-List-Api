@@ -15,7 +15,7 @@ function App() {
     <>
       <Routes>
         <Route
-          path="/ToDo-List-Api/reglog"
+          path="/reglog"
           element={
             <Suspense fallback={"Загрузка..."}>
               <RegLog />
@@ -30,7 +30,7 @@ function App() {
           }
         >
           <Route
-            path="/ToDo-List-Api/todo"
+            path="/"
             element={
               <Suspense fallback={"Загрузка..."}>
                 <ToDO

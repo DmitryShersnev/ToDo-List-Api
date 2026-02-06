@@ -6,7 +6,7 @@ const PrivateRoute = () => {
   console.log("privateRoute");
 
   if (!token) {
-    return <Navigate to="/ToDo-List-Api/reglog" replace />;
+    return <Navigate to="/reglog" replace />;
   }
   return <Outlet />;
 };

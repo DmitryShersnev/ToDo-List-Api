@@ -147,7 +147,7 @@ const ToDO = ({ setTasks, tasks, filter, setFilter, token, setToken }) => {
       <Filtrarion setFilter={setFilter} />
       <hr />
       <Cleaning countOfActive={countOfActive} clearTasks={clearTasks} />
-      <button onClick={() => localStorage.setItem("token", "")}>
+      <button onClick={() => localStorage.removeItem("token")}>
         Разлогиниться
       </button>
     </>

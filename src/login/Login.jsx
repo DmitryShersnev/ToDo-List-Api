@@ -35,7 +35,7 @@ const Login = ({ setToken, token }) => {
       );
       const res = await response.json();
       if (response.ok) {
-        navigate("/ToDo-List-Api/todo");
+        navigate("/");
         localStorage.setItem("token", res.token);
       } else {
         alert(res.message);
