@@ -11,10 +11,12 @@ function App() {
   const [token, setToken] = useState(() => {
     const saved = localStorage.getItem("token");
 
-    return saved ? saved : [];
+    return saved ? saved : "";
   });
+  console.log(token);
 
   let filteredTasks = [];
+  console.log("app");
 
   const filterTasks = (filter) => {
     if (filter === "all") {

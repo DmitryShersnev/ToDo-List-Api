@@ -3,6 +3,8 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router";
 
 const Login = ({ setToken, token }) => {
+  console.log("login");
+
   const navigate = useNavigate();
   const initialValues = {
     email: "",

@@ -21,6 +21,8 @@ const ToDO = ({
     getAllTasks();
   }, []);
 
+  console.log("todo");
+
   const getAllTasks = async () => {
     try {
       const response = await fetch(
