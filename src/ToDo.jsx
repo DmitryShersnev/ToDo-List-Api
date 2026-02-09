@@ -44,18 +44,6 @@ const ToDO = ({ setTasks, tasks, filter, setFilter, token, setToken }) => {
     }
   };
 
-  let filteredTasks = [];
-
-  const filterTasks = (filter) => {
-    if (filter === "all") {
-      filteredTasks = tasks;
-    } else if (filter === "active") {
-      filteredTasks = tasks.filter((item) => !item.isCompleted);
-    } else if (filter === "done") {
-      filteredTasks = tasks.filter((item) => item.isCompleted);
-    }
-    return filteredTasks;
-  };
   const changeCheckbox = async (id) => {
     try {
       const response = await fetch(`${apiUrl}/todos/${id}/isCompleted`, {
@@ -115,11 +103,18 @@ const ToDO = ({ setTasks, tasks, filter, setFilter, token, setToken }) => {
     }
   };
 
+  const filteredTasks = tasks.filter((item) => {
+    if (filter === "all") return true;
+
+    if (filter === "active") return !item.isCompleted;
+
+    if (filter === "done") return item.isCompleted;
+  });
+
   const countOfActive = tasks.filter(
     (item) => item.isCompleted === false,
   ).length;
 
-  filterTasks(filter);
   return (
     <>
       <Header />
