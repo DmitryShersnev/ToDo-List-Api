@@ -20,19 +20,17 @@ const Login = ({ setToken, token }) => {
       )
       .required("Введите пароль"),
   });
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const login = async (data) => {
     try {
-      const response = await fetch(
-        "https://todo-redev.herokuapp.com/api/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
+      const response = await fetch(`${apiUrl}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(data),
+      });
       const res = await response.json();
       if (response.ok) {
         navigate("/");

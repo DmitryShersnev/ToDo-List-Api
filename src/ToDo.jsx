@@ -12,19 +12,17 @@ const ToDO = ({ setTasks, tasks, filter, setFilter, token, setToken }) => {
   }, []);
 
   console.log("todo");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const navigate = useNavigate();
 
   const getAllTasks = async () => {
     try {
-      const response = await fetch(
-        "https://todo-redev.herokuapp.com/api/todos",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+      const response = await fetch(`${apiUrl}/todos`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      );
+      });
       const data = await response.json();
       setTasks(data);
     } catch (error) {
@@ -33,15 +31,12 @@ const ToDO = ({ setTasks, tasks, filter, setFilter, token, setToken }) => {
   };
   const deleteTask = async (id) => {
     try {
-      const response = await fetch(
-        `https://todo-redev.herokuapp.com/api/todos/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+      const response = await fetch(`${apiUrl}/todos/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      );
+      });
       const data = await response.json();
       setTasks((tasks) => tasks.filter((item) => item.id !== id));
     } catch (error) {
@@ -63,15 +58,12 @@ const ToDO = ({ setTasks, tasks, filter, setFilter, token, setToken }) => {
   };
   const changeCheckbox = async (id) => {
     try {
-      const response = await fetch(
-        `https://todo-redev.herokuapp.com/api/todos/${id}/isCompleted`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+      const response = await fetch(`${apiUrl}/todos/${id}/isCompleted`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      );
+      });
       const data = await response.json();
       setTasks((tasks) =>
         tasks.map((item) =>
@@ -85,17 +77,14 @@ const ToDO = ({ setTasks, tasks, filter, setFilter, token, setToken }) => {
 
   const changeTitle = async (id, newTitle) => {
     try {
-      const response = await fetch(
-        `https://todo-redev.herokuapp.com/api/todos/${id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({ title: newTitle }),
+      const response = await fetch(`${apiUrl}/todos/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      );
+        body: JSON.stringify({ title: newTitle }),
+      });
       const data = await response.json();
       setTasks((tasks) =>
         tasks.map((item) =>
@@ -112,7 +101,7 @@ const ToDO = ({ setTasks, tasks, filter, setFilter, token, setToken }) => {
       const completedTasks = tasks.filter((item) => item.isCompleted);
       await Promise.all(
         completedTasks.map((item) =>
-          fetch(`https://todo-redev.herokuapp.com/api/todos/${item.id}`, {
+          fetch(`${apiUrl}/todos/${item.id}`, {
             method: "DELETE",
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

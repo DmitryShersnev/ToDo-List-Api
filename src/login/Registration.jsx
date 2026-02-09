@@ -26,18 +26,17 @@ const Registration = () => {
       .required("Введите ваш возраст"),
   });
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const addNewUser = async (data) => {
     try {
-      const response = await fetch(
-        "https://todo-redev.herokuapp.com/api/users/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
+      const response = await fetch(`${apiUrl}/users/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(data),
+      });
       const res = await response.json();
       if (response.ok) {
         alert("Вы успешно зарегистрировались. Теперь нужно залогиниться");

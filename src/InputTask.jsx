@@ -6,20 +6,18 @@ const InputTask = ({ filteredTasks, setTasks, token }) => {
   const handleChange = (e) => {
     setInputText(e.target.value);
   };
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const addNewTask = async () => {
     try {
-      const response = await fetch(
-        "https://todo-redev.herokuapp.com/api/todos",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({ title: inputText }),
+      const response = await fetch(`${apiUrl}/todos`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      );
+        body: JSON.stringify({ title: inputText }),
+      });
       const data = await response.json();
       setTasks((tasks) => [...tasks, data]);
     } catch (error) {
