@@ -30,7 +30,7 @@ const Registration = () => {
 
   const addNewUser = async (data) => {
     try {
-      const response = await fetch(`${apiUrl}/users/register`, {
+      const response = await fetch(`${apiUrl}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

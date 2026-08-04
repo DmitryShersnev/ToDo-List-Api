@@ -5,115 +5,170 @@ import Filtrarion from "./Filtration";
 import Cleaning from "./Cleaning";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 const ToDO = ({ setTasks, tasks, filter, setFilter, token, setToken }) => {
-  useEffect(() => {
-    getAllTasks();
-  }, []);
-
-  console.log("todo");
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const getAllTasks = async () => {
-    try {
-      const response = await fetch(`${apiUrl}/todos`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const data = await response.json();
+  const fetchTasks = async () => {
+    const response = await fetch(`${apiUrl}/todos`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Ошибка при загрузке данных");
+    }
+    const json = await response.json();
+
+    return json.data;
+  };
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["tasks"],
+    queryFn: fetchTasks,
+  });
+
+  useEffect(() => {
+    if (Array.isArray(data)) {
       setTasks(data);
-    } catch (error) {
-      console.log(error);
+    } else {
+      setTasks([]);
     }
-  };
-  const deleteTask = async (id) => {
-    try {
-      const response = await fetch(`${apiUrl}/todos/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const data = await response.json();
-      setTasks((tasks) => tasks.filter((item) => item.id !== id));
-    } catch (error) {
-      console.log(error);
+  }, [data, setTasks]);
+
+  const fetchDeleteTask = async (id) => {
+    const response = await fetch(`${apiUrl}/todos/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Не удалось удалить задачу");
     }
   };
 
-  const changeCheckbox = async (id) => {
-    try {
-      const response = await fetch(`${apiUrl}/todos/${id}/isCompleted`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const data = await response.json();
-      setTasks((tasks) =>
-        tasks.map((item) =>
-          item.id === id ? { ...item, isCompleted: !item.isCompleted } : item,
-        ),
-      );
-    } catch (error) {
+  const deleteTaskMutation = useMutation({
+    mutationFn: fetchDeleteTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+    onError: (error) => {
       console.log(error);
-    }
+    },
+  });
+
+  const deleteTask = (id) => {
+    deleteTaskMutation.mutate(id);
   };
 
-  const changeTitle = async (id, newTitle) => {
-    try {
-      const response = await fetch(`${apiUrl}/todos/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ title: newTitle }),
-      });
-      const data = await response.json();
-      setTasks((tasks) =>
-        tasks.map((item) =>
-          item.id === id ? { ...item, title: newTitle } : item,
-        ),
-      );
-    } catch (error) {
-      console.log(error);
+  const fetchChangeCheckbox = async (id) => {
+    const response = await fetch(`${apiUrl}/todos/${id}/toggle`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Не удалось изменить статус задачи");
     }
+    const data = await response.json();
+    return data;
   };
 
-  const clearTasks = async () => {
-    try {
-      const completedTasks = tasks.filter((item) => item.isCompleted);
-      await Promise.all(
-        completedTasks.map((item) =>
-          fetch(`${apiUrl}/todos/${item.id}`, {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }),
-        ),
-      );
-      setTasks((tasks) => tasks.filter((item) => !item.isCompleted));
-    } catch (error) {
+  const changeCheckboxMutation = useMutation({
+    mutationFn: fetchChangeCheckbox,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+    onError: (error) => {
       console.log(error);
+    },
+  });
+
+  const changeCheckbox = (id) => {
+    changeCheckboxMutation.mutate(id);
+  };
+
+  const fetchChangeTitle = async ({ id, newTitle }) => {
+    const response = await fetch(`${apiUrl}/todos/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ title: newTitle }),
+    });
+    if (!response.ok) {
+      throw new Error("Не удалось изменить задачу");
     }
+    return await response.json();
+  };
+
+  const changeTitleMutation = useMutation({
+    mutationFn: fetchChangeTitle,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const changeTitle = (id, newTitle) => {
+    changeTitleMutation.mutate({ id, newTitle });
+  };
+
+  const fetchClearTasks = async () => {
+    const completedTasks = tasks.filter((item) => item.completed);
+    await Promise.all(
+      completedTasks.map((item) =>
+        fetch(`${apiUrl}/todos/${item.id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }),
+      ),
+    );
+    if (!response.ok) {
+      throw new Error("Не удалось удалить задачи");
+    }
+    const data = await response.json();
+    return data;
+  };
+
+  const clearTasksMutation = useMutation({
+    mutationFn: fetchClearTasks,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const clearTasks = () => {
+    clearTasksMutation.mutate();
   };
 
   const filteredTasks = tasks.filter((item) => {
     if (filter === "all") return true;
 
-    if (filter === "active") return !item.isCompleted;
+    if (filter === "active") return !item.completed;
 
-    if (filter === "done") return item.isCompleted;
+    if (filter === "done") return item.completed;
   });
 
-  const countOfActive = tasks.filter(
-    (item) => item.isCompleted === false,
-  ).length;
+  const countOfActive = tasks.filter((item) => item.completed === false).length;
+
+  if (isLoading) return <p>Загрузка...</p>;
+  if (isError) return <p>Ошибка: {error?.message}</p>;
 
   return (
     <>

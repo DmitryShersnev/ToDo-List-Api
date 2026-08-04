@@ -34,7 +34,7 @@ const Login = ({ setToken, token }) => {
       const res = await response.json();
       if (response.ok) {
         navigate("/");
-        localStorage.setItem("token", res.token);
+        localStorage.setItem("token", res.access_token);
       } else {
         alert(res.message);
       }

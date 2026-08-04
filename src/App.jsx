@@ -9,8 +9,6 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState("all");
 
-  console.log("app");
-
   return (
     <>
       <Routes>

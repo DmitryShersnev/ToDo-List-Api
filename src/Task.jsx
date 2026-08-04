@@ -49,7 +49,7 @@ const Task = ({ item, deleteTask, changeCheckbox, changeTitle }) => {
       <div className="task">
         <input
           type="checkbox"
-          checked={item.isCompleted}
+          checked={item.completed}
           onChange={() => changeCheckbox(item.id)}
         />
         {isEdit ? (
@@ -65,7 +65,7 @@ const Task = ({ item, deleteTask, changeCheckbox, changeTitle }) => {
           </>
         ) : (
           <>
-            <p className={item.isCompleted ? "checked" : ""}>{item.title}</p>
+            <p className={item.completed ? "checked" : ""}>{item.title}</p>
             <button onClick={() => setIsEdit(true)}>🖊️</button>
           </>
         )}
